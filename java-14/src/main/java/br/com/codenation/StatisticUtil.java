@@ -14,7 +14,22 @@ public class StatisticUtil {
 	}
 
 	public static int mode(int[] elements) {
-		return 0;
+		int maxValue = 0, maxCount = 0, i, j;
+
+		for (i = 0; i < elements.length; ++i) {
+			int count = 0;
+			for (j = 0; j < elements.length; ++j) {
+				if (elements[j] == elements[i]) {
+					++count;
+				}
+			}
+
+			if (count > maxCount) {
+				maxCount = count;
+				maxValue = elements[i];
+			}
+		}
+		return maxValue;
 	}
 
 	public static int median(int[] elements) {
@@ -24,11 +39,5 @@ public class StatisticUtil {
 			return (elementosOrdenados.get((elementosOrdenados.size() / 2)) + elementosOrdenados.get((elementosOrdenados.size() / 2) - 1)) / 2;
 		}
 		return elementosOrdenados.get(elementosOrdenados.size() / 2);
-	}
-
-	public static void main(String[] args) {
-
-		System.out.println(" MEDIA "+ average(new int[]{1, 2, 3, 4, 5, 6}));
-		System.out.println(" MEDIANA "+ median(new int[]{1, 2, 6, 8, 10, 20, 9}));
 	}
 }
