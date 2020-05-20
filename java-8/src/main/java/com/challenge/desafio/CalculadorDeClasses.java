@@ -13,9 +13,12 @@ public class CalculadorDeClasses implements Calculavel {
     public BigDecimal somar(Object obj) {
         BigDecimal soma = BigDecimal.ZERO;
         try {
-            for (Field field : obj.getClass().getFields()) {
-                if (field.isAnnotationPresent(Somar.class) && field.getType().isInstance(BigDecimal.class)) {
-                    soma.add((BigDecimal) field.get(obj));
+
+            for (Field field : obj.getClass().getDeclaredFields()) {
+                field.setAccessible(true);
+
+                if (field.isAnnotationPresent(Somar.class) && field.getType().equals(BigDecimal.class)) {
+                    soma = soma.add((BigDecimal) field.get(obj));
                 }
             }
         } catch (Exception e) {
@@ -28,9 +31,10 @@ public class CalculadorDeClasses implements Calculavel {
     public BigDecimal subtrair(Object obj) {
         BigDecimal soma = BigDecimal.ZERO;
         try {
-            for (Field field : obj.getClass().getFields()) {
-                if (field.isAnnotationPresent(Subtrair.class) && field.getType().isInstance(BigDecimal.class)) {
-                    soma.add((BigDecimal) field.get(obj));
+            for (Field field : obj.getClass().getDeclaredFields()) {
+                field.setAccessible(true);
+                if (field.isAnnotationPresent(Subtrair.class) && field.getType().equals(BigDecimal.class)) {
+                    soma = soma.add((BigDecimal) field.get(obj));
                 }
             }
         } catch (Exception e) {
