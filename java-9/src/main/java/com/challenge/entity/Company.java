@@ -9,10 +9,10 @@ package com.challenge.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -44,7 +44,6 @@ public class Company implements Serializable {
   private String slug;
 
   @OneToMany
-  @JoinColumn(name = "candidate_id")
   private Set<Candidate> candidates;
 
   @Column(name = "created_at", nullable = false, updatable = false)

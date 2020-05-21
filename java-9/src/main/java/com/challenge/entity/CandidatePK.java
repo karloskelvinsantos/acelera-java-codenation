@@ -7,18 +7,23 @@ package com.challenge.entity;
  To change this template use File | Settings | File Templates.
 */
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+
+import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Embeddable
 @Getter
 @Setter
-class CandidateId implements Serializable {
-  @OneToOne
+@Data
+class CandidatePK implements Serializable {
+  @ManyToOne
   @JoinColumn(name = "user_id", nullable = false)
   @NotNull
   private User user;
@@ -28,7 +33,7 @@ class CandidateId implements Serializable {
   @NotNull
   private Acceleration acceleration;
 
-  @OneToOne
+  @ManyToOne
   @JoinColumn(name = "company_id", nullable = false)
   @NotNull
   private Company company;

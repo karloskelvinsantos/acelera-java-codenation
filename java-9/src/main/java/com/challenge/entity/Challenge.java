@@ -48,7 +48,6 @@ public class Challenge implements Serializable {
   private Set<Acceleration> accelerations;
 
   @OneToMany
-  @JoinColumn(name = "submission_id")
   private Set<Submission> submissions;
 
   @Column(name = "created_at", nullable = false, updatable = false)

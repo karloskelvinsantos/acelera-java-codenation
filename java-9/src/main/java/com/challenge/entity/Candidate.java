@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 public class Candidate implements Serializable{
 
   @EmbeddedId
-  private CandidateId candidateId;
+  private CandidatePK candidatePK;
 
   @Column(nullable = false)
   @NotNull

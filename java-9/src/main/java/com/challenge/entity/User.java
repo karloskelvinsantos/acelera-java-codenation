@@ -54,11 +54,9 @@ public class User implements Serializable {
   private String password;
 
   @OneToMany
-  @JoinColumn(name = "candidate_id")
   private Set<Candidate> candidates;
 
   @OneToMany
-  @JoinColumn(name = "submission_id")
   private Set<Submission> submissions;
 
   @Column(name = "created_at", nullable = false, updatable = false)

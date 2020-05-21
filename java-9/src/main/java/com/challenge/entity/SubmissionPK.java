@@ -7,20 +7,21 @@ package com.challenge.entity;
  To change this template use File | Settings | File Templates.
 */
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import java.io.Serializable;
 
 @Embeddable
 @Getter
 @Setter
-public class SubmissionId implements Serializable {
-    @OneToOne
+@Data
+public class SubmissionPK implements Serializable {
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
