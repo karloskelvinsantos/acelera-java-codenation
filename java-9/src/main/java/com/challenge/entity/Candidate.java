@@ -7,33 +7,33 @@ package com.challenge.entity;
  To change this template use File | Settings | File Templates.
 */
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.util.Set;
-
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@EqualsAndHashCode(callSuper = true)
 @Table(schema = "codenation")
-public class Candidate extends BaseEntity{
+public class Candidate implements Serializable{
 
-  @OneToOne
-  @JoinColumn(name = "user_id")
-  private User user;
+  @EmbeddedId
+  private CandidateId candidateId;
 
-  @OneToMany(targetEntity = Acceleration.class, mappedBy = "id")
-  private Set<Acceleration> acceleration;
-
-  @OneToOne
-  @JoinColumn(name = "company_id")
-  private Company company;
-
+  @Column(nullable = false)
+  @NotNull
   private int status;
+
+  @Column(name = "created_at", nullable = false, updatable = false)
+  @CreatedDate
+  @NotNull
+  private LocalDateTime createdAt;
+
 }

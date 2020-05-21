@@ -12,6 +12,7 @@ import lombok.Setter;
 
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import java.io.Serializable;
 
@@ -23,7 +24,7 @@ public class SubmissionId implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "challenge_id")
     private Challenge challenge;
 

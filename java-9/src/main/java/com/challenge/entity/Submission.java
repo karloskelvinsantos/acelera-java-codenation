@@ -11,23 +11,33 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 
 @Entity
-@NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
-@EqualsAndHashCode(callSuper = true)
 @Table(schema = "codenation")
-public class Submission extends BaseEntity implements Serializable {
+public class Submission implements Serializable {
 
   @EmbeddedId
   SubmissionId submissionId;
 
+  @NotNull
   private BigDecimal score;
+
+  @Column(name = "created_at", nullable = false, updatable = false)
+  @CreatedDate
+  @NotNull
+  private LocalDateTime createdAt;
 
 }

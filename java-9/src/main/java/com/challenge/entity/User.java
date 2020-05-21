@@ -8,25 +8,32 @@ package com.challenge.entity;
 */
 
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
-@NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
-@EqualsAndHashCode(callSuper = true)
 @Table(schema = "codenation")
-public class User extends BaseEntity{
+public class User implements Serializable {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
   @Column(name = "full_name", length = 100, nullable = false)
+  @Size(max = 100)
   @NotEmpty
   @NotNull
   private String fullName;
@@ -43,6 +50,20 @@ public class User extends BaseEntity{
   private String nickname;
 
   @NotNull
+  @Size(max = 255)
   private String password;
+
+  @OneToMany
+  @JoinColumn(name = "candidate_id")
+  private Set<Candidate> candidates;
+
+  @OneToMany
+  @JoinColumn(name = "submission_id")
+  private Set<Submission> submissions;
+
+  @Column(name = "created_at", nullable = false, updatable = false)
+  @CreatedDate
+  @NotNull
+  private LocalDateTime createdAt;
 
 }
