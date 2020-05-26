@@ -9,12 +9,18 @@ import com.challenge.service.interfaces.UserServiceInterface;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserServiceInterface {
 
+    private final UserRepository repository;
+
     @Autowired
-    UserRepository repository;
+    public UserServiceImpl(UserRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public User save(User user) {

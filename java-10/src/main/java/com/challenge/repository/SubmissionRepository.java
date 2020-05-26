@@ -14,9 +14,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SubmissionRepository extends CrudRepository<Submission, SubmissionId> {
 
-    @Query("SELECT max(s.score) FROM Submission s JOIN Challenge c WHERE c.id = :challengeId")
-    BigDecimal findHigherScoreByChallengeId(@Param("challengeId")  Long challengId);
+    @Query("SELECT max(s.score) FROM Submission s JOIN s.id.challenge c WHERE c.id = :challengeId")
+    BigDecimal findHigherScoreByChallengeId(@Param("challengeId")  Long challengeId);
 
-    @Query("FROM Submission s JOIN Challenge c JOIN Acceleration a WHERE c.id = :challengeId AND a.id = :accelerationId")
-    List<Submission> findByChallengeIdAndAccelerationId(@Param("challengeId") Long challengeId, @Param("accelerationId") Long accelerationId);   
+    @Query("FROM Submission s JOIN s.id.challenge c JOIN c.accelerations ac WHERE c.id = :challengeId AND ac.id = :accelerationId")
+    List<Submission> findByChallengeIdAndAccelerationId(@Param("challengeId") Long challengeId, @Param("accelerationId") Long accelerationId);
+
 }

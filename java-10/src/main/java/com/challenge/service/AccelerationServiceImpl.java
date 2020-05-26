@@ -9,12 +9,18 @@ import com.challenge.service.interfaces.AccelerationServiceInterface;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class AccelerationServiceImpl implements AccelerationServiceInterface {
 
+    private final AccelerationRepository repository;
+
     @Autowired
-    AccelerationRepository repository;
+    public AccelerationServiceImpl(AccelerationRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public Acceleration save(Acceleration acceleration) {

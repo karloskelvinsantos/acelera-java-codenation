@@ -9,12 +9,18 @@ import com.challenge.service.interfaces.SubmissionServiceInterface;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class SubmissionServiceImpl implements SubmissionServiceInterface {
 
+    private final SubmissionRepository repository;
+
     @Autowired
-    SubmissionRepository repository;
+    public SubmissionServiceImpl(SubmissionRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public Submission save(Submission submission) {

@@ -10,12 +10,18 @@ import com.challenge.service.interfaces.CandidateServiceInterface;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class CandidateServiceImpl implements CandidateServiceInterface {
 
+    private final CandidateRepository repository;
+
     @Autowired
-    CandidateRepository repository;
+    public CandidateServiceImpl(CandidateRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public Candidate save(Candidate candidate) {
@@ -29,7 +35,7 @@ public class CandidateServiceImpl implements CandidateServiceInterface {
 
     @Override
     public Optional<Candidate> findById(Long userId, Long companyId, Long accelerationId) {
-        return null;
+        return repository.findByUserAndCompanyAndAccelerationId(userId, companyId, accelerationId);
     }
 
     @Override

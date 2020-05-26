@@ -11,13 +11,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class ChallengeServiceImpl implements ChallengeServiceInterface {
 
+    private final ChallengeRepository repository;
+
     @Autowired
-    ChallengeRepository repository;
+    public ChallengeServiceImpl(ChallengeRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
-    @Transactional
     public Challenge save(Challenge challenge) {
         return repository.save(challenge);
     }

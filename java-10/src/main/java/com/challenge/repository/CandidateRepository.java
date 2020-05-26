@@ -13,12 +13,15 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CandidateRepository extends CrudRepository<Candidate, CandidateId> {
-
-    Optional<Candidate> findById(CandidateId candidateId);
     
-    @Query("FROM Candidate candidate JOIN Company company WHERE company.id = :companyId")
+    @Query("FROM Candidate candidate WHERE candidate.id.company.id = :companyId")
     List<Candidate> findByCompanyId(@Param("companyId") Long companyId);
 
-    @Query("FROM Candidate candidate JOIN Acceleration acceleration WHERE acceleration.id = :accelerationId")
+    @Query("FROM Candidate candidate WHERE candidate.id.acceleration.id = :accelerationId")
     List<Candidate> findByAccelerationId(@Param("accelerationId") Long accelerationId);
+
+    @Query("FROM Candidate candidate WHERE candidate.id.user.id = :userId AND candidate.id.company.id = :companyId AND candidate.id.acceleration.id = :accelerationId")
+    Optional<Candidate> findByUserAndCompanyAndAccelerationId(@Param("userId") Long userId,
+                                                          @Param("companyId") Long companyId,
+                                                          @Param("companyId") Long accelerationId);
 }

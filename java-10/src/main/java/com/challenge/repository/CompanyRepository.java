@@ -12,9 +12,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CompanyRepository extends CrudRepository<Company, Long> {
     
-    @Query("FROM Company company JOIN Candidate c JOIN Acceleration a WHERE a.id = :accelerationId")
+    @Query("FROM Company company JOIN company.candidates c WHERE c.id.acceleration.id = :accelerationId")
     List<Company> findByAccelerationId(@Param("accelerationId") Long accelerationId);
 
-    @Query("FROM Company company JOIN Candidate c JOIN User u WHERE u.id = :userId")
-	List<Company> findByUserId(@Param("userId") Long userId);
+    @Query("FROM Company company JOIN company.candidates c WHERE c.id.user.id = :userId")
+	  List<Company> findByUserId(@Param("userId") Long userId);
 }

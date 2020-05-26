@@ -9,12 +9,18 @@ import com.challenge.service.interfaces.CompanyServiceInterface;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class CompanyServiceImpl implements CompanyServiceInterface {
 
+    private final CompanyRepository repository;
+
     @Autowired
-    CompanyRepository repository;
+    public CompanyServiceImpl(CompanyRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public Company save(Company company) {
