@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import br.com.codenation.model.OrderItem;
@@ -22,6 +23,14 @@ public class OrderServiceTest {
 		items.add(new OrderItem(1l, 3l));
 		items.add(new OrderItem(2l, 2l));
 		assertNotNull(this.orderService.calculateOrderValue(items));
+	}
+
+	@Test
+	public void testCalculateOrderValueTotal() {
+		List<OrderItem> items = new ArrayList();
+		items.add(new OrderItem(1L, 3L));
+		items.add(new OrderItem(2L, 2L));
+		Assert.assertEquals(Double.valueOf(850.0), this.orderService.calculateOrderValue(items));
 	}
 
 	@Test
