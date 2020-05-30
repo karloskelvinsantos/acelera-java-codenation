@@ -39,6 +39,11 @@ public class OrderServiceTest {
 	}
 
 	@Test
+	public void testFindProductsByIdSize2() {
+		Assert.assertEquals(2L, (long)this.orderService.findProductsById(Arrays.asList(1L, 2L, 9223372036854775807L)).size());
+	}
+
+	@Test
 	public void testCalculateMultipleOrders() {
 		List<OrderItem> items = new ArrayList<>();
 		items.add(new OrderItem(1l, 3l));
@@ -50,6 +55,18 @@ public class OrderServiceTest {
 		items.add(new OrderItem(1l, 3l));
 		items.add(new OrderItem(2l, 2l));
 		assertNotNull(this.orderService.calculateMultipleOrders(Arrays.asList(items, items2, items3)));
+	}
+
+	@Test
+	public void testCalculateTotalValueMultipleOrdersWithSale() {
+		List<OrderItem> items = new ArrayList();
+		items.add(new OrderItem(1L, 3L));
+		items.add(new OrderItem(2L, 2L));
+		items.add(new OrderItem(8L, 1L));
+		List<OrderItem> items2 = new ArrayList();
+		items2.add(new OrderItem(1L, 3L));
+		items2.add(new OrderItem(2L, 2L));
+		Assert.assertEquals(Double.valueOf(1860.0), this.orderService.calculateMultipleOrders(Arrays.asList(items, items2)));
 	}
 
 	@Test

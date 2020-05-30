@@ -12,41 +12,27 @@ import br.com.codenation.repository.ProductRepositoryImpl;
 
 public class OrderServiceImpl implements OrderService {
 
-	private ProductRepository productRepository = new ProductRepositoryImpl();
+	private final ProductRepository productRepository = new ProductRepositoryImpl();
+	private final double descountWhereIsSale = 0.2d;
 
 	/**
 	 * Calculate the sum of all OrderItems
 	 */
 	@Override
 	public Double calculateOrderValue(List<OrderItem> items) {
-		Supplier<Stream<OrderItem>> orderItemStream = items::stream;
-		Supplier<Stream<Product>> productStream = () -> orderItemStream.get().map(item -> productRepository.findById(item.getProductId()).get());
+		return items.stream().mapToDouble(item -> {
+			Optional<Product> product = productRepository.findById(item.getProductId());
 
-		Double productsIsNotSale = productStream.get()
-						.filter(p -> p.getIsSale() == Boolean.FALSE)
-						.reduce(0D,
-										(partial, product) ->
-														partial + (product.getValue() * orderItemStream
-																		.get()
-																		.filter(item -> item.getProductId().equals(product.getId()))
-																		.mapToDouble(OrderItem::getQuantity)
-																		.findAny()
-																		.orElse(0)),
-										Double::sum);
+			if (product.isPresent()) {
+				if (product.get().getIsSale())
+					return (product.get().getValue() - product.get().getValue() * descountWhereIsSale) * item.getQuantity();
+				else
+					return product.get().getValue() * item.getQuantity();
+			} else {
+				return (double) 0;
+			}
 
-		Double productsIsSale = productStream.get()
-						.filter(Product::getIsSale)
-						.reduce(0D,
-										(partial, product) ->
-														partial + (product.getValue() * 0.20) * orderItemStream
-																		.get()
-																		.filter(item -> item.getProductId().equals(product.getId()))
-																		.mapToDouble(OrderItem::getQuantity)
-																		.findAny()
-																		.orElse(0),
-										Double::sum);
-
-		return Double.sum(productsIsNotSale, productsIsSale);
+		}).sum();
 	}
 
 	/**
@@ -55,7 +41,9 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public Set<Product> findProductsById(List<Long> ids) {
 		return ids.stream()
-						.map(id -> productRepository.findById(id).get())
+						.map(productRepository::findById)
+						.filter(Optional::isPresent)
+						.map(Optional::get)
 						.collect(Collectors.toSet());
 	}
 
@@ -64,12 +52,9 @@ public class OrderServiceImpl implements OrderService {
 	 */
 	@Override
 	public Double calculateMultipleOrders(List<List<OrderItem>> orders) {
-		double calculate = 0D;
-
-		for (List<OrderItem> order : orders) {
-			calculate = Double.sum(calculate, calculateOrderValue(order));
-		}
-		return calculate;
+		return orders.stream()
+						.mapToDouble(this::calculateOrderValue)
+						.sum();
 	}
 
 	/**
@@ -77,11 +62,9 @@ public class OrderServiceImpl implements OrderService {
 	 */
 	@Override
 	public Map<Boolean, List<Product>> groupProductsBySale(List<Long> productIds) {
-		return productIds.stream()
-						.map(id -> productRepository.findById(id).get())
-						.collect(
-										Collectors.groupingBy(Product::getIsSale, Collectors.toList())
-						);
+		return findProductsById(productIds)
+						.stream()
+						.collect(Collectors.groupingBy(Product::getIsSale, Collectors.toList()));
 	}
 
 }
