@@ -5,28 +5,28 @@ public class CriptografiaCesariana implements Criptografia {
 
     @Override
     public String criptografar(String texto) {
-       return encryptOrDecrypt(texto, true);
+       return shiftCharacters(texto, true);
     }
 
     @Override
     public String descriptografar(String texto) {
-        return encryptOrDecrypt(texto, false);
+        return shiftCharacters(texto, false);
     }
 
-    public String encryptOrDecrypt(String text, boolean isEncrypt) {
+    public String shiftCharacters(String text, boolean isEncrypt) {
         if (text.isEmpty()) throw new IllegalArgumentException();
 
-        StringBuilder textEncryptOrDecrypt = new StringBuilder();
+        StringBuilder shiftedCharacters = new StringBuilder();
 
         for (int i = 0; i < text.length(); i++) {
             char letter = text.toLowerCase().charAt(i);
-            if (letter >= 97 && letter <= 122) {
+            if (Character.isLetter(letter)) {
                 letter = isEncrypt ? encrypt(letter) : decrypt(letter);
             }
-            textEncryptOrDecrypt.append(letter);
+            shiftedCharacters.append(letter);
         }
 
-        return textEncryptOrDecrypt.toString();
+        return shiftedCharacters.toString();
     }
 
     public char encrypt(int i) {
